@@ -1,0 +1,1 @@
+require('fs').writeFileSync('src/App.jsx', require('fs').readFileSync('src/App.jsx', 'utf8').replace(/[\s\S].*/, ''))
