@@ -1,4 +1,8 @@
-@import "tailwindcss";
+
+import { writeFileSync } from 'fs'
+
+writeFileSync('src/index.css',
+`@import "tailwindcss";
 
 @theme {
   --font-sans: 'Plus Jakarta Sans', sans-serif;
@@ -46,4 +50,6 @@
     color: var(--color-text-primary);
     font-family: var(--font-sans);
   }
-}
+}`)
+
+console.log('index.css berhasil diupdate!')

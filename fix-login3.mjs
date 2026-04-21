@@ -1,4 +1,7 @@
-import { useState } from "react"
+import { writeFileSync } from 'fs'
+
+writeFileSync('src/pages/Login.jsx',
+`import { useState } from "react"
 import { useNavigate } from "react-router-dom"
 
 export default function Login() {
@@ -64,4 +67,6 @@ export default function Login() {
       </div>
     </div>
   )
-}
+}`)
+
+console.log('Login.jsx berhasil diupdate!')
