@@ -1,8 +1,18 @@
-import React from "react"
-import PostCard from "./PostCard"
-import { posts } from "./Services"
+import React, { useEffect, useState } from "react"
+import PostCard from "./components/PostCard"
 
 function Exercise() {
+  const [posts, setPosts] = useState([])
+
+  useEffect(() => {
+    async function fetchPosts() {
+      const res = await fetch("https://jsonplaceholder.typicode.com/posts")
+      const data = await res.json()
+      setPosts(data)
+    }
+    fetchPosts()
+  }, [])
+
   return (
     <div className="min-h-screen bg-gray-100 p-6">
       <h1 className="text-3xl font-bold text-center mb-6 text-blue-700">
