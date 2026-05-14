@@ -1,20 +1,40 @@
-import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
-import Login from './pages/Login'
-import Dashboard from './pages/Dashboard'
-import UserCards from './pages/UserCards'
-import Exercise from './Exercise'
-import MainLayout from './layouts/MainLayout'
+import SignInPage from "./pages/SignIn"
+import SignUpPage from "./pages/SignUp"
+import ErrorPage from "./pages/Error"
+import { createBrowserRouter, RouterProvider, Link } from "react-router-dom"
 
-export default function App() {
+function App() {
+  const myRouter = createBrowserRouter([
+    {
+      path: "/",
+      element: (
+        <div className="flex justify-center items-center min-h-screen">
+          <Link to="/login" className="p-2 m-5 bg-primary-500 text-white rounded">
+            Login
+          </Link>
+          |
+          <Link to="/register" className="p-2 m-5 bg-primary-500 text-white rounded">
+            Register
+          </Link>
+        </div>
+      ),
+      errorElement: <ErrorPage />,
+    },
+    {
+      path: "/login",
+      element: <SignInPage />,
+    },
+    {
+      path: "/register",
+      element: <SignUpPage />,
+    },
+  ])
+
   return (
-    <BrowserRouter>
-      <Routes>
-        <Route path="/" element={<Exercise />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/usercards" element={<UserCards />} />
-        <Route path="/exercise" element={<Exercise />} />
-        <Route path="/dashboard" element={<MainLayout><Dashboard /></MainLayout>} />
-      </Routes>
-    </BrowserRouter>
+    <>
+      <RouterProvider router={myRouter} />
+    </>
   )
 }
+
+export default App
