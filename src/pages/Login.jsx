@@ -8,7 +8,7 @@ export default function Login() {
   const navigate = useNavigate()
 
   const handleLogin = () => {
-    navigate("/usercards")
+    navigate("/dashboard")
   }
 
   return (
