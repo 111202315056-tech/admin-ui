@@ -1,16 +1,15 @@
-function LabeledInput({ label, type, placeholder, name }) {
+import React from "react"
+import Input from "./Input"
+
+function LabeledInput(props) {
+  const { label, id, ...rest } = props
+
   return (
     <div>
-      <label className="block text-sm font-medium text-gray-700 mb-1.5">
+      <label htmlFor={id} className="block text-sm mb-2">
         {label}
       </label>
-      <input
-        type={type}
-        name={name}
-        placeholder={placeholder}
-        autoComplete="off"
-        className="w-full px-4 py-3 rounded-xl border border-gray-200 text-sm focus:outline-none focus:border-primary-500 transition bg-white"
-      />
+      <Input id={id} {...rest} />
     </div>
   )
 }

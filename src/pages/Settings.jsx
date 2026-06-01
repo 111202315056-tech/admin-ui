@@ -1,26 +1,64 @@
-import Card from "../components/Card"
+import { useState } from "react"
+import MainLayout from "../components/Layouts/MainLayout"
 
 export default function SettingsPage() {
-  return (
-    <div className="space-y-6">
-      <div className="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
-        <div>
-          <p className="text-sm text-slate-500">Settings</p>
-          <h1 className="text-2xl font-semibold text-slate-900">Application settings</h1>
-        </div>
-      </div>
+  const [name, setName] = useState("aldi")
+  const [email, setEmail] = useState("aldi@example.com")
+  const [notifications, setNotifications] = useState(true)
+  const [saved, setSaved] = useState(false)
 
-      <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
-        <Card title="Profile settings" subtitle="Manage your administrator profile">
-          <p className="text-sm text-slate-500">Update your name, email, and contact information.</p>
-        </Card>
-        <Card title="Security" subtitle="Change password and access rules">
-          <p className="text-sm text-slate-500">Set up two-factor authentication and login preferences.</p>
-        </Card>
-        <Card title="Notifications" subtitle="Email and alerts">
-          <p className="text-sm text-slate-500">Enable or disable notifications for dashboard activity.</p>
-        </Card>
+  const handleSave = () => {
+    setSaved(true)
+    setTimeout(() => setSaved(false), 2000)
+  }
+
+  return (
+    <MainLayout>
+      <div className="max-w-2xl space-y-4">
+        <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-100">
+          <h2 className="text-base font-bold text-gray-800 mb-4">Profile</h2>
+          <div className="space-y-4">
+            <div>
+              <label className="text-xs text-gray-400 mb-1 block">Name</label>
+              <input
+                type="text"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-teal-500"
+              />
+            </div>
+            <div>
+              <label className="text-xs text-gray-400 mb-1 block">Email</label>
+              <input
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-teal-500"
+              />
+            </div>
+          </div>
+        </div>
+
+        <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-100">
+          <h2 className="text-base font-bold text-gray-800 mb-4">Preferences</h2>
+          <div className="flex items-center justify-between">
+            <span className="text-sm text-gray-600">Enable Notifications</span>
+            <button
+              onClick={() => setNotifications(!notifications)}
+              className={`w-12 h-6 rounded-full transition-colors ${notifications ? "bg-teal-500" : "bg-gray-300"}`}
+            >
+              <div className={`w-5 h-5 bg-white rounded-full shadow transition-transform mx-0.5 ${notifications ? "translate-x-6" : "translate-x-0"}`} />
+            </button>
+          </div>
+        </div>
+
+        <button
+          onClick={handleSave}
+          className="bg-teal-500 hover:bg-teal-600 text-white font-semibold px-6 py-3 rounded-lg transition"
+        >
+          {saved ? "Saved! ✓" : "Save Changes"}
+        </button>
       </div>
-    </div>
+    </MainLayout>
   )
 }
