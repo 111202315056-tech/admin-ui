@@ -1,7 +1,10 @@
+@import "./App.css";
 @import "tailwindcss";
 
 @theme {
   --font-sans: 'Plus Jakarta Sans', sans-serif;
+
+  --color-primary: #299d91;
 
   --color-primary-50:  #E6FAF7;
   --color-primary-100: #CCEDE8;

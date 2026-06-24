@@ -1,5 +1,6 @@
-import { useState } from "react"
-import { Link, useLocation } from "react-router-dom"
+import { useContext, useState } from "react"
+import { Link, useLocation, useNavigate } from "react-router-dom"
+import { AuthContext } from "../../context/authContext"
 
 const menuItems = [
   { path: "/dashboard", label: "Overview", icon: "🏠" },
@@ -11,8 +12,15 @@ const menuItems = [
 
 export default function MainLayout({ children }) {
   const location = useLocation()
+  const navigate = useNavigate()
+  const { logout } = useContext(AuthContext)
   const [collapsed, setCollapsed] = useState(false)
   const [mobileOpen, setMobileOpen] = useState(false)
+
+  const handleLogout = async () => {
+    await logout()
+    navigate("/login")
+  }
 
   const sidebarContent = (
     <>
@@ -61,12 +69,13 @@ export default function MainLayout({ children }) {
               <p className="text-xs text-slate-500">admin@finebank.io</p>
             </div>
           </div>
-          <Link
-            to="/login"
-            className="mt-4 inline-flex w-full items-center justify-center rounded-2xl border border-slate-200 bg-slate-50 py-3 text-sm font-medium text-slate-700 hover:bg-slate-100"
+          <button
+            type="button"
+            onClick={handleLogout}
+            className="mt-4 inline-flex w-full items-center justify-center rounded-2xl border border-slate-200 bg-slate-50 py-3 text-sm font-medium text-red-500 hover:bg-red-50 hover:border-red-200 transition"
           >
             Logout
-          </Link>
+          </button>
         </div>
       )}
     </>

@@ -115,5 +115,5 @@ export const goals = {
   targetAmount: 20000,
   presentAmount: 12500,
   month: 5,
-  year: 2023,
+  year: 2026,
 };

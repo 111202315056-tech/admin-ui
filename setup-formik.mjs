@@ -1,4 +1,30 @@
-import { Link, useNavigate } from "react-router-dom"
+import { writeFileSync } from 'fs'
+
+// Button dengan cursor-pointer hover:scale-105
+writeFileSync('src/components/Elements/Button.jsx',
+`function Button(props) {
+  const { children, type = "submit", variant = "primary", onClick } = props
+
+  const baseClasses = "h-12 rounded-md text-sm w-full cursor-pointer hover:scale-105 transition-transform"
+  const variantClasses = {
+    primary: "bg-primary-500 text-white hover:bg-primary-600",
+    secondary: "bg-gray-100 text-gray-600 hover:bg-gray-200",
+  }
+
+  const finalClasses = \`\${baseClasses} \${variantClasses[variant] || variantClasses.primary}\`
+
+  return (
+    <button className={finalClasses} type={type} onClick={onClick}>
+      {children}
+    </button>
+  )
+}
+
+export default Button`)
+
+// FormSignIn dengan Formik + Yup
+writeFileSync('src/components/Fragments/FormSignIn.jsx',
+`import { Link, useNavigate } from "react-router-dom"
 import { Formik, Form, Field, ErrorMessage } from "formik"
 import * as Yup from "yup"
 import LabeledInput from "../Elements/LabeledInput"
@@ -57,7 +83,7 @@ function FormSignIn({ onSubmit }) {
                   id="password"
                   type="password"
                   label="Password"
-                  placeholder="●●●●●●●●●●●●●●"
+                  placeholder="\u25CF\u25CF\u25CF\u25CF\u25CF\u25CF\u25CF\u25CF\u25CF\u25CF\u25CF\u25CF\u25CF\u25CF"
                 />
               )}
             </Field>
@@ -113,4 +139,31 @@ function FormSignIn({ onSubmit }) {
   )
 }
 
-export default FormSignIn
+export default FormSignIn`)
+
+// SignIn page - pass onSubmit handler
+writeFileSync('src/pages/SignIn.jsx',
+`import { useNavigate } from "react-router-dom"
+import AuthLayout from "../components/Layouts/AuthLayout"
+import FormSignIn from "../components/Fragments/FormSignIn"
+
+function SignIn() {
+  const navigate = useNavigate()
+
+  const handleSubmit = async (email, password) => {
+    console.log("Login attempt:", email, password)
+    // Simulasi delay API
+    await new Promise((res) => setTimeout(res, 1500))
+    navigate("/dashboard")
+  }
+
+  return (
+    <AuthLayout>
+      <FormSignIn onSubmit={handleSubmit} />
+    </AuthLayout>
+  )
+}
+
+export default SignIn`)
+
+console.log('setup-formik selesai!')
