@@ -1,11 +1,11 @@
-import MainLayout from "../components/Layouts/MainLayout";
-import CardBalance from "../components/Fragments/CardBalance";
-import CardGoal from "../components/Fragments/CardGoal";
-import CardRecentTransaction from "../components/Fragments/CardRecentTransaction";
-import CardUpcomingBill from "../components/Fragments/CardUpcomingBill";
-import CardExpenseBreakdown from "../components/Fragments/CardExpenseBreakdown";
-import CardStatistic from "../components/Fragments/CardStatistic";
-import { transactions, bills, expensesBreakdowns, balances, goals, expensesStatistics } from "../data";
+import MainLayout from "../components/Layouts/MainLayout"
+import CardBalance from "../components/Fragments/CardBalance"
+import CardGoal from "../components/Fragments/CardGoal"
+import CardRecentTransaction from "../components/Fragments/CardRecentTransaction"
+import CardUpcomingBill from "../components/Fragments/CardUpcomingBill"
+import CardExpenseBreakdown from "../components/Fragments/CardExpenseBreakdown"
+import CardStatistic from "../components/Fragments/CardStatistic"
+import { transactions, expensesBreakdowns, balances, goals, expensesStatistics } from "../data"
 
 function Dashboard() {
   return (
@@ -13,7 +13,7 @@ function Dashboard() {
       <div className="grid grid-cols-3 gap-4 mb-4">
         <CardBalance data={balances} />
         <CardGoal data={goals} />
-        <CardUpcomingBill data={bills} />
+        <CardUpcomingBill />
       </div>
       <div className="grid grid-cols-3 gap-4">
         <div className="col-span-1">
@@ -25,7 +25,7 @@ function Dashboard() {
         </div>
       </div>
     </MainLayout>
-  );
+  )
 }
 
-export default Dashboard;
+export default Dashboard

@@ -3,6 +3,8 @@ import Icon from "../Elements/Icon"
 import { useState, useContext } from "react"
 import { ThemeContext } from "../../context/themeContext"
 import { AuthContext } from "../../context/authContext"
+import { useDarkMode } from "../../context/darkModeContext"
+import { Backdrop, CircularProgress } from "@mui/material"
 
 const themes = [
   { name: "theme-green", bgcolor: "bg-[#299D91]", color: "#299D91" },
@@ -32,8 +34,10 @@ function MainLayout({ children }) {
   const navigate = useNavigate()
   const [showNotif, setShowNotif] = useState(false)
   const [notifList, setNotifList] = useState(notifications)
+  const [loggingOut, setLoggingOut] = useState(false)
   const { theme, setTheme } = useContext(ThemeContext)
   const { logout } = useContext(AuthContext)
+  const { isDark, toggleDarkMode } = useDarkMode()
 
   const unreadCount = notifList.filter(n => !n.read).length
 
@@ -42,13 +46,20 @@ function MainLayout({ children }) {
   }
 
   const handleLogout = async () => {
+    setLoggingOut(true)
     await logout()
     navigate("/login")
   }
 
   return (
-    <div className={`flex h-screen bg-gray-100 ${theme.name}`}>
-      <aside className="w-64 bg-gray-900 flex flex-col flex-shrink-0 overflow-y-auto">
+    <div className={`flex h-screen ${isDark ? "bg-gray-950" : "bg-gray-100"} ${theme.name} transition-colors duration-300`}>
+
+      {/* Backdrop saat logout */}
+      <Backdrop open={loggingOut} sx={{ zIndex: 9999, color: "#fff" }}>
+        <CircularProgress color="inherit" />
+      </Backdrop>
+
+      <aside className={`w-64 ${isDark ? "bg-gray-900 border-gray-800" : "bg-gray-900"} flex flex-col flex-shrink-0 overflow-y-auto`}>
         <div className="px-6 py-6 border-b border-gray-700">
           <h1 className="text-xl font-black">
             <span className="text-primary">FINE</span>
@@ -88,6 +99,23 @@ function MainLayout({ children }) {
           </div>
         </div>
 
+        {/* Dark Mode Toggle */}
+        <div className="px-4 py-3 border-t border-gray-700">
+          <div className="flex items-center justify-between">
+            <span className="text-xs text-gray-400">
+              {isDark ? "🌙 Dark Mode" : "☀️ Light Mode"}
+            </span>
+            <button
+              onClick={toggleDarkMode}
+              className={`relative w-11 h-6 rounded-full transition-colors duration-300 focus:outline-none ${isDark ? "bg-primary" : "bg-gray-600"}`}
+            >
+              <span
+                className={`absolute top-0.5 left-0.5 w-5 h-5 bg-white rounded-full shadow transition-transform duration-300 ${isDark ? "translate-x-5" : "translate-x-0"}`}
+              />
+            </button>
+          </div>
+        </div>
+
         <div className="border-t border-gray-700 px-3 py-4">
           <button
             onClick={handleLogout}
@@ -100,12 +128,12 @@ function MainLayout({ children }) {
       </aside>
 
       <div className="flex-1 flex flex-col overflow-y-auto">
-        <header className="bg-white border-b border-gray-100 px-6 py-4 flex items-center justify-between sticky top-0 z-40">
+        <header className={`${isDark ? "bg-gray-800 border-gray-700" : "bg-white border-gray-100"} border-b px-6 py-4 flex items-center justify-between sticky top-0 z-40 transition-colors duration-300`}>
           <div>
-            <p className="text-xs text-gray-400">
+            <p className={`text-xs ${isDark ? "text-gray-400" : "text-gray-400"}`}>
               {new Date().toLocaleDateString("en-US", { weekday: "long", year: "numeric", month: "long", day: "numeric" })}
             </p>
-            <p className="text-lg font-semibold text-gray-800">Hello Aldi 👋</p>
+            <p className={`text-lg font-semibold ${isDark ? "text-white" : "text-gray-800"}`}>Hello Aldi 👋</p>
           </div>
           <div className="flex items-center gap-3">
             <div className="relative">
@@ -124,30 +152,30 @@ function MainLayout({ children }) {
               </button>
 
               {showNotif && (
-                <div className="absolute right-0 top-10 w-80 bg-white rounded-xl shadow-lg border border-gray-100 z-50">
-                  <div className="flex justify-between items-center px-4 py-3 border-b border-gray-100">
-                    <h3 className="text-sm font-semibold text-gray-800">Notifications</h3>
+                <div className={`absolute right-0 top-10 w-80 ${isDark ? "bg-gray-800 border-gray-700" : "bg-white border-gray-100"} rounded-xl shadow-lg border z-50`}>
+                  <div className={`flex justify-between items-center px-4 py-3 border-b ${isDark ? "border-gray-700" : "border-gray-100"}`}>
+                    <h3 className={`text-sm font-semibold ${isDark ? "text-white" : "text-gray-800"}`}>Notifications</h3>
                     <button onClick={markAllRead} className="text-xs text-primary hover:underline">
                       Mark all as read
                     </button>
                   </div>
-                  <div className="divide-y divide-gray-50">
+                  <div className="divide-y divide-gray-700">
                     {notifList.map(n => (
                       <div
                         key={n.id}
-                        className={`px-4 py-3 flex gap-3 items-start cursor-pointer hover:bg-gray-50 ${!n.read ? "bg-teal-50" : ""}`}
+                        className={`px-4 py-3 flex gap-3 items-start cursor-pointer ${!n.read ? isDark ? "bg-gray-700" : "bg-teal-50" : ""} hover:bg-gray-700/50`}
                         onClick={() => setNotifList(notifList.map(x => x.id === n.id ? { ...x, read: true } : x))}
                       >
                         <div className={`w-2 h-2 rounded-full mt-1.5 flex-shrink-0 ${!n.read ? "bg-primary" : "bg-gray-300"}`} />
                         <div>
-                          <p className="text-xs font-semibold text-gray-800">{n.title}</p>
-                          <p className="text-xs text-gray-500">{n.message}</p>
+                          <p className={`text-xs font-semibold ${isDark ? "text-white" : "text-gray-800"}`}>{n.title}</p>
+                          <p className={`text-xs ${isDark ? "text-gray-400" : "text-gray-500"}`}>{n.message}</p>
                           <p className="text-xs text-gray-400 mt-1">{n.time}</p>
                         </div>
                       </div>
                     ))}
                   </div>
-                  <div className="px-4 py-3 border-t border-gray-100">
+                  <div className={`px-4 py-3 border-t ${isDark ? "border-gray-700" : "border-gray-100"}`}>
                     <button onClick={() => setShowNotif(false)} className="text-xs text-gray-400 hover:text-gray-600 w-full text-center">
                       Close
                     </button>
@@ -158,7 +186,7 @@ function MainLayout({ children }) {
             <div className="w-8 h-8 rounded-full bg-primary flex items-center justify-center text-white font-semibold text-sm">A</div>
           </div>
         </header>
-        <main className="flex-1 p-6">{children}</main>
+        <main className={`flex-1 p-6 ${isDark ? "text-white" : ""}`}>{children}</main>
       </div>
     </div>
   )
