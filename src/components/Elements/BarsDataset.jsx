@@ -1,22 +1,31 @@
 import { BarChart } from "@mui/x-charts/BarChart";
 import { useContext } from "react";
 import { ThemeContext } from "../../context/themeContext";
-
-const chartSetting = {
-  height: 300,
-  yAxis: [{ disableTicks: true, disableLine: true, width: 50 }],
-  grid: { horizontal: true },
-  sx: {
-    "& .MuiChartsAxis-left .MuiChartsAxis-tickLabel": { fill: "#9F9F9F" },
-    "& .MuiChartsAxis-bottom .MuiChartsAxis-tickLabel": { fill: "#9F9F9F" },
-  },
-};
+import { useDarkMode } from "../../context/darkModeContext";
 
 export default function BarsDataset({ dataset }) {
   const { theme } = useContext(ThemeContext);
+  const { isDark } = useDarkMode();
+
+  const tickColor = isDark ? "#9CA3AF" : "#6B7280";
+  const gridColor = isDark ? "#374151" : "#E5E7EB";
+
+  const chartSetting = {
+    height: 260,
+    yAxis: [{ disableTicks: true, disableLine: true, width: 40 }],
+    grid: { horizontal: true },
+    sx: {
+      "& .MuiChartsAxis-left .MuiChartsAxis-tickLabel": { fill: tickColor },
+      "& .MuiChartsAxis-bottom .MuiChartsAxis-tickLabel": { fill: tickColor },
+      "& .MuiChartsGrid-line": { stroke: gridColor },
+      "& .MuiChartsLegend-series text": { fill: `${tickColor} !important` },
+    },
+  };
 
   const coloredSeries = dataset.series.map((s, i) =>
-    i === dataset.series.length - 1 ? { ...s, color: theme.color } : s
+    i === dataset.series.length - 1
+      ? { ...s, color: theme.color }
+      : { ...s, color: isDark ? "#4B5563" : "#E5E7EB" }
   );
 
   return (

@@ -2,10 +2,12 @@ import { useEffect, useState } from "react"
 import axios from "axios"
 import Card from "../Elements/Card"
 import { CircularProgress } from "@mui/material"
+import { useDarkMode } from "../../context/darkModeContext"
 
 function CardUpcomingBill() {
   const [bills, setBills] = useState([])
   const [loading, setLoading] = useState(true)
+  const { isDark } = useDarkMode()
 
   useEffect(() => {
     const fetchBills = async () => {
@@ -30,6 +32,7 @@ function CardUpcomingBill() {
   const formatDate = (dateStr) => {
     if (!dateStr) return { month: "-", date: "-" }
     const d = new Date(dateStr)
+    if (isNaN(d.getTime())) return { month: "-", date: "-" }
     return {
       month: d.toLocaleString("en-US", { month: "short" }),
       date: d.getDate(),
@@ -45,24 +48,24 @@ function CardUpcomingBill() {
       ) : bills.length === 0 ? (
         <p className="text-center text-xs text-gray-400 py-4">Tidak ada data.</p>
       ) : (
-        <div className="flex flex-col gap-4">
+        <div className="flex flex-col gap-3">
           {bills.map((item) => {
             const { month, date } = formatDate(item.dueDate || item.date)
             return (
-              <div key={item.id} className="flex justify-between items-center">
-                <div className="flex items-center gap-3">
-                  <div className="bg-gray-100 p-2 rounded-lg text-center min-w-12">
+              <div key={item.id} className="flex justify-between items-center gap-2">
+                <div className="flex items-center gap-2 min-w-0">
+                  <div className={`p-2 rounded-lg text-center min-w-10 flex-shrink-0 ${isDark ? "bg-gray-700" : "bg-gray-100"}`}>
                     <span className="text-xs text-gray-400">{month}</span>
-                    <p className="text-xl font-bold">{date}</p>
+                    <p className={`text-base font-bold ${isDark ? "text-white" : "text-gray-800"}`}>{date}</p>
                   </div>
-                  <div>
-                    <p className="text-sm font-bold">{item.name || item.title}</p>
-                    <p className="text-xs text-gray-400">
+                  <div className="min-w-0">
+                    <p className={`text-sm font-bold truncate ${isDark ? "text-white" : "text-gray-800"}`}>{item.name || item.title}</p>
+                    <p className="text-xs text-gray-400 truncate">
                       Last Charge - {item.lastCharge || item.lastChargeDate || "-"}
                     </p>
                   </div>
                 </div>
-                <span className="py-2 px-4 border border-gray-200 rounded-lg font-bold text-sm">
+                <span className={`py-1.5 px-3 border rounded-lg font-bold text-xs whitespace-nowrap ${isDark ? "border-gray-600 text-white" : "border-gray-200 text-gray-800"}`}>
                   ${item.amount}
                 </span>
               </div>

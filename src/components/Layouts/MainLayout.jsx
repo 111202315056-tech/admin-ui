@@ -55,8 +55,17 @@ function MainLayout({ children }) {
     <div className={`flex h-screen ${isDark ? "bg-gray-950" : "bg-gray-100"} ${theme.name} transition-colors duration-300`}>
 
       {/* Backdrop saat logout */}
-      <Backdrop open={loggingOut} sx={{ zIndex: 9999, color: "#fff" }}>
+      <Backdrop
+        open={loggingOut}
+        sx={{
+          zIndex: 9999,
+          color: "#fff",
+          flexDirection: "column",
+          gap: 2
+        }}
+      >
         <CircularProgress color="inherit" />
+        <p style={{ color: "#fff", fontSize: "14px", marginTop: "12px" }}>Logging Out</p>
       </Backdrop>
 
       <aside className={`w-64 ${isDark ? "bg-gray-900 border-gray-800" : "bg-gray-900"} flex flex-col flex-shrink-0 overflow-y-auto`}>
